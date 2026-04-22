@@ -1,0 +1,132 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - img "PETRONAS logo" [ref=e5]
+      - navigation "Main navigation" [ref=e22]:
+        - generic [ref=e23]: myHLD Portal
+        - generic [ref=e25]: HLD Authoring & Governance
+  - main [ref=e26]:
+    - generic [ref=e124]:
+      - generic [ref=e125]:
+        - button "Back to dashboard" [ref=e126] [cursor=pointer]: ← Back
+        - heading "Create New HLD" [level=1] [ref=e127]
+      - tablist "HLD creation steps" [ref=e128]:
+        - tab "1 Registration" [selected] [ref=e129] [cursor=pointer]:
+          - generic [ref=e130]: "1"
+          - generic [ref=e131]: Registration
+        - tab "2 Application & Data" [ref=e133] [cursor=pointer]:
+          - generic [ref=e134]: "2"
+          - generic [ref=e135]: Application & Data
+        - tab "3 Cybersecurity" [ref=e137] [cursor=pointer]:
+          - generic [ref=e138]: "3"
+          - generic [ref=e139]: Cybersecurity
+        - tab "4 AI Results" [ref=e141] [cursor=pointer]:
+          - generic [ref=e142]: "4"
+          - generic [ref=e143]: AI Results
+      - tabpanel [ref=e144]:
+        - generic [ref=e145]:
+          - heading "HLD Registration" [level=2] [ref=e146]
+          - generic [ref=e147]:
+            - generic [ref=e148]:
+              - generic [ref=e149]: HLD Category *
+              - combobox "HLD Category *" [ref=e150]:
+                - option "Select category..."
+                - option "New Application HLD" [selected]
+                - option "Enhancement HLD"
+            - generic [ref=e151]:
+              - generic [ref=e152]: Application
+              - combobox "Application" [ref=e153]:
+                - option "Select application..."
+                - option "+ New Application"
+                - option "SAP S/4HANA" [selected]
+                - option "PETRONAS eProcurement"
+                - option "myHR Portal"
+                - option "Fleet Management System"
+                - option "PETRONAS Trading System"
+                - option "Upstream Production Dashboard"
+                - option "Gentari EV Charging Platform"
+                - option "HSE Incident Reporting"
+                - option "MPM Asset Tracker"
+                - option "Virtus IP Management"
+            - generic [ref=e177]:
+              - text: Historical HLD Lineage
+              - generic [ref=e178]:
+                - generic [ref=e179]:
+                  - generic [ref=e180]: HLD-2023-001 (v1.0)
+                  - generic [ref=e181]: SAP S/4HANA Migration to AWS
+                  - generic [ref=e182]:
+                    - generic [ref=e183]: Approved
+                    - text: 2023-06-15
+                  - text: →
+                - generic [ref=e184]:
+                  - generic [ref=e185]: HLD-2024-012 (v1.1)
+                  - generic [ref=e186]: SAP S/4HANA — Fiori Launchpad Enhancement
+                  - generic [ref=e187]:
+                    - generic [ref=e188]: Approved
+                    - text: 2024-03-20
+                  - text: →
+                - generic [ref=e189]:
+                  - generic [ref=e190]: HLD-2024-045 (v1.2)
+                  - generic [ref=e191]: SAP S/4HANA — BTP Integration
+                  - generic [ref=e192]:
+                    - generic [ref=e193]: In-Review
+                    - text: 2024-11-10
+            - generic [ref=e154]:
+              - generic [ref=e155]: HLD Title *
+              - textbox "HLD Title *" [ref=e156]:
+                - /placeholder: Enter HLD title...
+                - text: SAP S/4HANA Cloud Analytics Platform
+            - generic [ref=e157]:
+              - generic [ref=e158]: HLD Description
+              - textbox "HLD Description" [active] [ref=e159]:
+                - /placeholder: Describe the HLD scope...
+                - text: Cloud-based analytics platform integrating SAP S/4HANA with AWS services for real-time operational dashboards
+            - generic [ref=e160]:
+              - generic [ref=e161]: HLD Type *
+              - combobox "HLD Type *" [ref=e162]:
+                - option "Select type..."
+                - option "ERP Application" [selected]
+                - option "Infrastructure"
+                - option "Non-ERP Application"
+            - generic [ref=e163]:
+              - generic [ref=e164]: Landscape Type *
+              - combobox "Landscape Type *" [ref=e165]:
+                - option "Select landscape..." [selected]
+                - option "Enterprise Cloud"
+                - option "On-Premise"
+                - option "SaaS"
+            - generic [ref=e166]:
+              - generic [ref=e167]: Business Division *
+              - combobox "Business Division *" [ref=e168]:
+                - option "Select division..." [selected]
+                - option "Corporate"
+                - option "Downstream"
+                - option "Gentari"
+                - option "PT & HSSE"
+                - option "Gas & Maritime"
+                - option "Upstream"
+                - option "Virtus IP"
+                - option "PDSB"
+                - option "MPM"
+            - generic [ref=e169]:
+              - generic [ref=e170]: Business Capability *
+              - combobox "Business Capability *" [ref=e171]:
+                - option "Select APQC category..." [selected]
+                - option "1.0 - Develop Vision and Strategy"
+                - option "2.0 - Develop and Manage Products and Services"
+                - option "3.0 - Market and Sell Products and Services"
+                - option "4.0 - Manage Supply Chain for Physical Products"
+                - option "5.0 - Deliver Services"
+                - option "6.0 - Manage Customer Service"
+                - option "7.0 - Develop and Manage Human Capital"
+                - option "8.0 - Manage Information Technology (IT)"
+                - option "9.0 - Manage Financial Resources"
+                - option "10.0 - Acquire, Construct, and Manage Assets"
+                - option "11.0 - Manage Enterprise Risk, Compliance, Remediation, and Resiliency"
+                - option "12.0 - Manage External Relationships"
+                - option "13.0 - Develop and Manage Business Capabilities"
+            - generic [ref=e172]:
+              - generic [ref=e173]: Business Capability (Sub-process)
+              - combobox "Business Capability (Sub-process)" [disabled] [ref=e174]:
+                - option "Select sub-process..." [selected]
+          - 'button "Next: Application & Data →" [ref=e176] [cursor=pointer]'

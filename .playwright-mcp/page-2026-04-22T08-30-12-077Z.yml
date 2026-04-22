@@ -1,0 +1,435 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - img "PETRONAS logo" [ref=e5]
+      - navigation "Main navigation" [ref=e22]:
+        - generic [ref=e23]: myHLD Portal
+        - generic [ref=e25]: HLD Authoring & Governance
+  - main [ref=e26]:
+    - generic [ref=e124]:
+      - generic [ref=e125]:
+        - button "Back to dashboard" [ref=e126] [cursor=pointer]: ← Back
+        - heading "Create New HLD" [level=1] [ref=e127]
+      - tablist "HLD creation steps" [ref=e128]:
+        - tab "1 Registration" [ref=e129] [cursor=pointer]:
+          - generic [ref=e130]: "1"
+          - generic [ref=e131]: Registration
+        - tab "2 Application & Data" [ref=e133] [cursor=pointer]:
+          - generic [ref=e134]: "2"
+          - generic [ref=e135]: Application & Data
+        - tab "3 Cybersecurity" [selected] [ref=e137] [cursor=pointer]:
+          - generic [ref=e138]: "3"
+          - generic [ref=e139]: Cybersecurity
+        - tab "4 AI Results" [ref=e141] [cursor=pointer]:
+          - generic [ref=e142]: "4"
+          - generic [ref=e143]: AI Results
+      - text: → →
+      - tabpanel [ref=e279]:
+        - generic [ref=e280]:
+          - heading "Cybersecurity & Compliance" [level=2] [ref=e281]
+          - heading "Business Impact Assessment (BIA)" [level=3] [ref=e282]
+          - generic [ref=e283]:
+            - generic [ref=e284]:
+              - generic [ref=e285]: Confidentiality
+              - combobox "Confidentiality" [ref=e286]:
+                - option "Select..."
+                - option "Severe"
+                - option "Major" [selected]
+                - option "Moderate"
+                - option "Insignificant"
+            - generic [ref=e287]:
+              - generic [ref=e288]: Integrity
+              - combobox "Integrity" [ref=e289]:
+                - option "Select..."
+                - option "Severe"
+                - option "Major"
+                - option "Moderate" [selected]
+                - option "Insignificant"
+            - generic [ref=e290]:
+              - generic [ref=e291]: Availability
+              - combobox "Availability" [ref=e292]:
+                - option "Select..."
+                - option "Severe"
+                - option "Major" [selected]
+                - option "Moderate"
+                - option "Insignificant"
+            - generic [ref=e293]:
+              - generic [ref=e294]: Overall
+              - combobox "Overall" [ref=e295]:
+                - option "Select..."
+                - option "Severe"
+                - option "Major" [selected]
+                - option "Moderate"
+                - option "Insignificant"
+          - generic [ref=e649]:
+            - heading "HA / DR Requirements" [level=3] [ref=e650]
+            - generic [ref=e651]:
+              - generic [ref=e652]:
+                - generic [ref=e653]: High-Availability (HA)
+                - generic [ref=e654]:
+                  - generic [ref=e655] [cursor=pointer]:
+                    - checkbox "Secondary Server (Cloud and/or On-Premise)" [ref=e656]
+                    - generic [ref=e657]: Secondary Server (Cloud and/or On-Premise)
+                  - generic [ref=e658] [cursor=pointer]:
+                    - checkbox "Availability Zone (Cloud only)" [ref=e659]
+                    - generic [ref=e660]: Availability Zone (Cloud only)
+                  - generic [ref=e661] [cursor=pointer]:
+                    - checkbox "Not Applicable" [ref=e662]
+                    - generic [ref=e663]: Not Applicable
+              - generic [ref=e664]:
+                - generic [ref=e665]: Disaster Recovery (DR)
+                - generic [ref=e666]:
+                  - generic [ref=e667] [cursor=pointer]:
+                    - checkbox "Replication Across (Cloud only)" [ref=e668]
+                    - generic [ref=e669]: Replication Across (Cloud only)
+                  - generic [ref=e670] [cursor=pointer]:
+                    - checkbox "Off-Site Replication (On-Prem Data Centre within 25km)" [ref=e671]
+                    - generic [ref=e672]: Off-Site Replication (On-Prem Data Centre within 25km)
+                  - generic [ref=e673] [cursor=pointer]:
+                    - checkbox "Not Applicable" [ref=e674]
+                    - generic [ref=e675]: Not Applicable
+          - heading "Connectivity" [level=3] [ref=e296]
+          - generic [ref=e298]:
+            - generic [ref=e299]: Connectivity Protocols
+            - generic [ref=e300]:
+              - generic [ref=e301] [cursor=pointer]:
+                - checkbox "HTTP" [ref=e302]
+                - generic [ref=e303]: HTTP
+              - generic [ref=e304] [cursor=pointer]:
+                - checkbox "HTTPS" [checked] [ref=e305]
+                - generic [ref=e306]: HTTPS
+              - generic [ref=e307] [cursor=pointer]:
+                - checkbox "SFTP" [ref=e308]
+                - generic [ref=e309]: SFTP
+              - generic [ref=e310] [cursor=pointer]:
+                - checkbox "RSTP (Video)" [ref=e311]
+                - generic [ref=e312]: RSTP (Video)
+              - generic [ref=e313] [cursor=pointer]:
+                - checkbox "SIP (Voice)" [ref=e314]
+                - generic [ref=e315]: SIP (Voice)
+              - generic [ref=e316] [cursor=pointer]:
+                - checkbox "SSH" [ref=e317]
+                - generic [ref=e318]: SSH
+              - generic [ref=e319] [cursor=pointer]:
+                - checkbox "DNS (External)" [ref=e320]
+                - generic [ref=e321]: DNS (External)
+              - generic [ref=e322] [cursor=pointer]:
+                - checkbox "DNS (Internal)" [ref=e323]
+                - generic [ref=e324]: DNS (Internal)
+          - heading "Identity and Access Management (IAM)" [level=3] [ref=e325]
+          - generic [ref=e327]:
+            - generic [ref=e328]:
+              - generic [ref=e329]: Authentication Approach
+              - generic [ref=e330]:
+                - generic [ref=e331] [cursor=pointer]:
+                  - checkbox "SAML" [ref=e332]
+                  - generic [ref=e333]: SAML
+                - generic [ref=e334] [cursor=pointer]:
+                  - checkbox "OpenID 2.0" [ref=e335]
+                  - generic [ref=e336]: OpenID 2.0
+                - generic [ref=e337] [cursor=pointer]:
+                  - checkbox "OAuth 2.0" [checked] [ref=e338]
+                  - generic [ref=e339]: OAuth 2.0
+                - generic [ref=e340] [cursor=pointer]:
+                  - checkbox "WS-Federation" [ref=e341]
+                  - generic [ref=e342]: WS-Federation
+            - generic [ref=e343]:
+              - generic [ref=e344]: Access Control
+              - generic [ref=e345]:
+                - generic [ref=e346] [cursor=pointer]:
+                  - checkbox "Role Based" [checked] [ref=e347]
+                  - generic [ref=e348]: Role Based
+                - generic [ref=e349] [cursor=pointer]:
+                  - checkbox "Attribute Based" [ref=e350]
+                  - generic [ref=e351]: Attribute Based
+                - generic [ref=e352] [cursor=pointer]:
+                  - checkbox "Context Based" [ref=e353]
+                  - generic [ref=e354]: Context Based
+                - generic [ref=e355] [cursor=pointer]:
+                  - checkbox "Policy Based" [ref=e356]
+                  - generic [ref=e357]: Policy Based
+            - generic [ref=e358]:
+              - generic [ref=e359]: Single Sign-On (SSO)
+              - generic [ref=e360]:
+                - generic [ref=e361] [cursor=pointer]:
+                  - checkbox "Microsoft Entra ID" [checked] [ref=e362]
+                  - generic [ref=e363]: Microsoft Entra ID
+                - generic [ref=e364] [cursor=pointer]:
+                  - checkbox "Custom Tailored" [ref=e365]
+                  - generic [ref=e366]: Custom Tailored
+                - generic [ref=e367] [cursor=pointer]:
+                  - checkbox "AWS LDAP" [ref=e368]
+                  - generic [ref=e369]: AWS LDAP
+                - generic [ref=e370] [cursor=pointer]:
+                  - checkbox "RADIUS" [ref=e371]
+                  - generic [ref=e372]: RADIUS
+                - generic [ref=e373] [cursor=pointer]:
+                  - checkbox "Azure B2B" [ref=e374]
+                  - generic [ref=e375]: Azure B2B
+                - generic [ref=e376] [cursor=pointer]:
+                  - checkbox "Microsoft AD" [ref=e377]
+                  - generic [ref=e378]: Microsoft AD
+            - generic [ref=e379]:
+              - generic [ref=e380]: Key / Password Management
+              - generic [ref=e381]:
+                - generic [ref=e382] [cursor=pointer]:
+                  - checkbox "Azure Key Vault" [ref=e383]
+                  - generic [ref=e384]: Azure Key Vault
+                - generic [ref=e385] [cursor=pointer]:
+                  - checkbox "AWS KMS" [checked] [ref=e386]
+                  - generic [ref=e387]: AWS KMS
+                - generic [ref=e388] [cursor=pointer]:
+                  - checkbox "Local Config" [ref=e389]
+                  - generic [ref=e390]: Local Config
+            - generic [ref=e391]:
+              - generic [ref=e392]: Cross Domain Identity Protocol
+              - generic [ref=e394] [cursor=pointer]:
+                - checkbox "SCIM 2.0" [ref=e395]
+                - generic [ref=e396]: SCIM 2.0
+            - generic [ref=e397]:
+              - generic [ref=e398]: Client / Server Authentication Method
+              - generic [ref=e399]:
+                - generic [ref=e400] [cursor=pointer]:
+                  - checkbox "JWT" [checked] [ref=e401]
+                  - generic [ref=e402]: JWT
+                - generic [ref=e403] [cursor=pointer]:
+                  - checkbox "Basic" [ref=e404]
+                  - generic [ref=e405]: Basic
+                - generic [ref=e406] [cursor=pointer]:
+                  - checkbox "Session" [ref=e407]
+                  - generic [ref=e408]: Session
+            - generic [ref=e409]:
+              - generic [ref=e410]: Cloud Resources Access Method
+              - generic [ref=e411]:
+                - generic [ref=e412] [cursor=pointer]:
+                  - checkbox "API" [ref=e413]
+                  - generic [ref=e414]: API
+                - generic [ref=e415] [cursor=pointer]:
+                  - checkbox "SAS" [ref=e416]
+                  - generic [ref=e417]: SAS
+                - generic [ref=e418] [cursor=pointer]:
+                  - checkbox "Connection String" [ref=e419]
+                  - generic [ref=e420]: Connection String
+                - generic [ref=e421] [cursor=pointer]:
+                  - checkbox "User/Password" [ref=e422]
+                  - generic [ref=e423]: User/Password
+                - generic [ref=e424] [cursor=pointer]:
+                  - checkbox "Web Console" [ref=e425]
+                  - generic [ref=e426]: Web Console
+            - generic [ref=e427]:
+              - generic [ref=e428]: Authorization Approach
+              - generic [ref=e429]:
+                - generic [ref=e430] [cursor=pointer]:
+                  - checkbox "User Access Matrix (Internal Users)" [ref=e431]
+                  - generic [ref=e432]: User Access Matrix (Internal Users)
+                - generic [ref=e433] [cursor=pointer]:
+                  - checkbox "Security matrices restrict user access" [ref=e434]
+                  - generic [ref=e435]: Security matrices restrict user access
+                - generic [ref=e436] [cursor=pointer]:
+                  - checkbox "Admin panel restricts user access" [ref=e437]
+                  - generic [ref=e438]: Admin panel restricts user access
+            - generic [ref=e439]:
+              - generic [ref=e440]: Authentication Implementation
+              - generic [ref=e441]:
+                - generic [ref=e442] [cursor=pointer]:
+                  - checkbox "Azure AD Authentication (Cloud AD)" [ref=e443]
+                  - generic [ref=e444]: Azure AD Authentication (Cloud AD)
+                - generic [ref=e445] [cursor=pointer]:
+                  - checkbox "Microsoft AD authentication (On-Prem AD)" [ref=e446]
+                  - generic [ref=e447]: Microsoft AD authentication (On-Prem AD)
+                - generic [ref=e448] [cursor=pointer]:
+                  - checkbox "User Access Matrix (Internal Users)" [ref=e449]
+                  - generic [ref=e450]: User Access Matrix (Internal Users)
+                - generic [ref=e451] [cursor=pointer]:
+                  - checkbox "User Access Matrix (External Users)" [ref=e452]
+                  - generic [ref=e453]: User Access Matrix (External Users)
+                - generic [ref=e454] [cursor=pointer]:
+                  - checkbox "Multi-factor Authentication (MFA)" [ref=e455]
+                  - generic [ref=e456]: Multi-factor Authentication (MFA)
+                - generic [ref=e457] [cursor=pointer]:
+                  - checkbox "Third-party Authentication (Consumer)" [ref=e458]
+                  - generic [ref=e459]: Third-party Authentication (Consumer)
+          - heading "Endpoint Security" [level=3] [ref=e460]
+          - generic [ref=e462]:
+            - generic [ref=e463]:
+              - generic [ref=e464]: Hardened Endpoint
+              - generic [ref=e465]:
+                - generic [ref=e466] [cursor=pointer]:
+                  - checkbox "Server" [checked] [ref=e467]
+                  - generic [ref=e468]: Server
+                - generic [ref=e469] [cursor=pointer]:
+                  - checkbox "Laptop" [ref=e470]
+                  - generic [ref=e471]: Laptop
+                - generic [ref=e472] [cursor=pointer]:
+                  - checkbox "Mobile Devices" [ref=e473]
+                  - generic [ref=e474]: Mobile Devices
+                - generic [ref=e475] [cursor=pointer]:
+                  - checkbox "Barcode Scanner" [ref=e476]
+                  - generic [ref=e477]: Barcode Scanner
+                - generic [ref=e478] [cursor=pointer]:
+                  - checkbox "Workstation" [ref=e479]
+                  - generic [ref=e480]: Workstation
+                - generic [ref=e481] [cursor=pointer]:
+                  - checkbox "Network Devices" [ref=e482]
+                  - generic [ref=e483]: Network Devices
+                - generic [ref=e484] [cursor=pointer]:
+                  - checkbox "IoT Devices" [ref=e485]
+                  - generic [ref=e486]: IoT Devices
+                - generic [ref=e487] [cursor=pointer]:
+                  - checkbox "Kiosk" [ref=e488]
+                  - generic [ref=e489]: Kiosk
+                - generic [ref=e490] [cursor=pointer]:
+                  - checkbox "Bartec" [ref=e491]
+                  - generic [ref=e492]: Bartec
+            - generic [ref=e493]:
+              - generic [ref=e494]: Endpoint Protection
+              - generic [ref=e495]:
+                - generic [ref=e496] [cursor=pointer]:
+                  - checkbox "MDE" [checked] [ref=e497]
+                  - generic [ref=e498]: MDE
+                - generic [ref=e499] [cursor=pointer]:
+                  - checkbox "McAfee" [ref=e500]
+                  - generic [ref=e501]: McAfee
+                - generic [ref=e502] [cursor=pointer]:
+                  - checkbox "Intune" [ref=e503]
+                  - generic [ref=e504]: Intune
+            - generic [ref=e505]:
+              - generic [ref=e506]: Cybersecurity Oversight
+              - generic [ref=e507]:
+                - generic [ref=e508] [cursor=pointer]:
+                  - checkbox "Monitoring System" [ref=e509]
+                  - generic [ref=e510]: Monitoring System
+                - generic [ref=e511] [cursor=pointer]:
+                  - checkbox "Notification alert and response" [ref=e512]
+                  - generic [ref=e513]: Notification alert and response
+          - heading "Application Security" [level=3] [ref=e514]
+          - generic [ref=e516]:
+            - generic [ref=e517]:
+              - generic [ref=e518]: Application Development
+              - generic [ref=e519]:
+                - generic [ref=e520] [cursor=pointer]:
+                  - checkbox "In-house" [ref=e521]
+                  - generic [ref=e522]: In-house
+                - generic [ref=e523] [cursor=pointer]:
+                  - checkbox "COTS" [ref=e524]
+                  - generic [ref=e525]: COTS
+                - generic [ref=e526] [cursor=pointer]:
+                  - checkbox "3rd Party" [ref=e527]
+                  - generic [ref=e528]: 3rd Party
+            - generic [ref=e529]:
+              - generic [ref=e530]: Secure Application Development
+              - generic [ref=e531]:
+                - generic [ref=e532] [cursor=pointer]:
+                  - checkbox "DevSecOps" [ref=e533]
+                  - generic [ref=e534]: DevSecOps
+                - generic [ref=e535] [cursor=pointer]:
+                  - checkbox "Security Assurance" [ref=e536]
+                  - generic [ref=e537]: Security Assurance
+                - generic [ref=e538] [cursor=pointer]:
+                  - checkbox "Secure Communication" [ref=e539]
+                  - generic [ref=e540]: Secure Communication
+                - generic [ref=e541] [cursor=pointer]:
+                  - checkbox "Security Configuration" [ref=e542]
+                  - generic [ref=e543]: Security Configuration
+            - generic [ref=e544]:
+              - generic [ref=e545]: Application Facing
+              - generic [ref=e546]:
+                - generic [ref=e547] [cursor=pointer]:
+                  - checkbox "Internal Users" [ref=e548]
+                  - generic [ref=e549]: Internal Users
+                - generic [ref=e550] [cursor=pointer]:
+                  - checkbox "External Users (mandatory WAF)" [ref=e551]
+                  - generic [ref=e552]: External Users (mandatory WAF)
+                - generic [ref=e553] [cursor=pointer]:
+                  - checkbox "Non-Human" [ref=e554]
+                  - generic [ref=e555]: Non-Human
+          - heading "Security Testing" [level=3] [ref=e556]
+          - generic [ref=e558]:
+            - generic [ref=e559]:
+              - generic [ref=e560]: Vulnerability Assessment + Web Assessment (VAWA)
+              - generic [ref=e561]:
+                - generic [ref=e562] [cursor=pointer]:
+                  - checkbox "Quarterly" [ref=e563]
+                  - generic [ref=e564]: Quarterly
+                - generic [ref=e565] [cursor=pointer]:
+                  - checkbox "Pre and Post-production" [ref=e566]
+                  - generic [ref=e567]: Pre and Post-production
+                - generic [ref=e568] [cursor=pointer]:
+                  - checkbox "Every 6 months" [ref=e569]
+                  - generic [ref=e570]: Every 6 months
+            - generic [ref=e571]:
+              - generic [ref=e572]: Dev Sec Ops
+              - generic [ref=e573]:
+                - generic [ref=e574] [cursor=pointer]:
+                  - checkbox "VAPT" [ref=e575]
+                  - generic [ref=e576]: VAPT
+                - generic [ref=e577] [cursor=pointer]:
+                  - checkbox "WSPT (API Penetration Testing)" [ref=e578]
+                  - generic [ref=e579]: WSPT (API Penetration Testing)
+                - generic [ref=e580] [cursor=pointer]:
+                  - checkbox "WAPT (Web Application Penetration Testing)" [ref=e581]
+                  - generic [ref=e582]: WAPT (Web Application Penetration Testing)
+          - heading "Network Security" [level=3] [ref=e583]
+          - generic [ref=e585]:
+            - generic [ref=e586]:
+              - generic [ref=e587]: Perimeter Security
+              - generic [ref=e588]:
+                - generic [ref=e589] [cursor=pointer]:
+                  - checkbox "Firewall - Next Generation Firewall" [ref=e590]
+                  - generic [ref=e591]: Firewall - Next Generation Firewall
+                - generic [ref=e592] [cursor=pointer]:
+                  - checkbox "IPS - Intrusion Prevention System" [ref=e593]
+                  - generic [ref=e594]: IPS - Intrusion Prevention System
+                - generic [ref=e595] [cursor=pointer]:
+                  - checkbox "WAF - Web Application Firewall" [checked] [active] [ref=e596]
+                  - generic [ref=e597]: WAF - Web Application Firewall
+            - generic [ref=e598]:
+              - generic [ref=e599]: Data Loss Prevention
+              - generic [ref=e601] [cursor=pointer]:
+                - checkbox "Edge DLP - Data Loss Prevention" [ref=e602]
+                - generic [ref=e603]: Edge DLP - Data Loss Prevention
+            - generic [ref=e604]:
+              - generic [ref=e605]: Network Connectivity
+              - generic [ref=e606]:
+                - generic [ref=e607] [cursor=pointer]:
+                  - checkbox "PETRONET" [ref=e608]
+                  - generic [ref=e609]: PETRONET
+                - generic [ref=e610] [cursor=pointer]:
+                  - checkbox "WiFi (WPA3)" [ref=e611]
+                  - generic [ref=e612]: WiFi (WPA3)
+                - generic [ref=e613] [cursor=pointer]:
+                  - checkbox "5G" [ref=e614]
+                  - generic [ref=e615]: 5G
+                - generic [ref=e616] [cursor=pointer]:
+                  - checkbox "Local ISP" [ref=e617]
+                  - generic [ref=e618]: Local ISP
+                - generic [ref=e619] [cursor=pointer]:
+                  - checkbox "Secure VPN" [ref=e620]
+                  - generic [ref=e621]: Secure VPN
+                - generic [ref=e622] [cursor=pointer]:
+                  - checkbox "Network Segmentation" [ref=e623]
+                  - generic [ref=e624]: Network Segmentation
+                - generic [ref=e625] [cursor=pointer]:
+                  - checkbox "IPSec" [ref=e626]
+                  - generic [ref=e627]: IPSec
+                - generic [ref=e628] [cursor=pointer]:
+                  - checkbox "4G" [ref=e629]
+                  - generic [ref=e630]: 4G
+                - generic [ref=e631] [cursor=pointer]:
+                  - checkbox "SDWAN" [ref=e632]
+                  - generic [ref=e633]: SDWAN
+            - generic [ref=e634]:
+              - generic [ref=e635]: Privileged Access Management (PAM)
+              - generic [ref=e636]:
+                - generic [ref=e637] [cursor=pointer]:
+                  - checkbox "CyberArk" [ref=e638]
+                  - generic [ref=e639]: CyberArk
+                - generic [ref=e640] [cursor=pointer]:
+                  - checkbox "Xage" [ref=e641]
+                  - generic [ref=e642]: Xage
+                - generic [ref=e643] [cursor=pointer]:
+                  - checkbox "Jump Server" [ref=e644]
+                  - generic [ref=e645]: Jump Server
+          - generic [ref=e646]:
+            - button "← Back" [ref=e647] [cursor=pointer]
+            - button "Generate HLD with AI" [ref=e648] [cursor=pointer]

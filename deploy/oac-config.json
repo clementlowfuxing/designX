@@ -1,0 +1,7 @@
+{
+  "Name": "myhld-portal-oac",
+  "Description": "OAC for myHLD Portal S3",
+  "SigningProtocol": "sigv4",
+  "SigningBehavior": "always",
+  "OriginAccessControlOriginType": "s3"
+}

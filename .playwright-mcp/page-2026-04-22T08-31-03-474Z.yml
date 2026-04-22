@@ -1,0 +1,61 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - img "PETRONAS logo" [ref=e5]
+      - navigation "Main navigation" [ref=e22]:
+        - generic [ref=e23]: myHLD Portal
+        - generic [ref=e25]: HLD Authoring & Governance
+  - main [ref=e26]:
+    - generic [ref=e124]:
+      - generic [ref=e125]:
+        - button "Back to dashboard" [ref=e126] [cursor=pointer]: ← Back
+        - heading "Create New HLD" [level=1] [ref=e127]
+      - tablist "HLD creation steps" [ref=e128]:
+        - tab "1 Registration" [ref=e129] [cursor=pointer]:
+          - generic [ref=e130]: "1"
+          - generic [ref=e131]: Registration
+        - tab "2 Application & Data" [ref=e133] [cursor=pointer]:
+          - generic [ref=e134]: "2"
+          - generic [ref=e135]: Application & Data
+        - tab "3 Cybersecurity" [ref=e137] [cursor=pointer]:
+          - generic [ref=e138]: "3"
+          - generic [ref=e139]: Cybersecurity
+        - tab "4 AI Results" [selected] [ref=e141] [cursor=pointer]:
+          - generic [ref=e142]: "4"
+          - generic [ref=e143]: AI Results
+      - text: → →
+      - tabpanel [ref=e676]:
+        - generic [ref=e677]:
+          - heading "Architecture Diagram" [level=2] [ref=e679]
+          - generic [ref=e681]:
+            - heading "Integration Summary" [level=2] [ref=e682]
+            - table "Integration summary" [ref=e683]:
+              - rowgroup [ref=e684]:
+                - row "Source System Target System Protocol Integration Type Direction" [ref=e685]:
+                  - columnheader "Source System" [ref=e686]
+                  - columnheader "Target System" [ref=e687]
+                  - columnheader "Protocol" [ref=e688]
+                  - columnheader "Integration Type" [ref=e689]
+                  - columnheader "Direction" [ref=e690]
+              - rowgroup
+          - generic [ref=e691]:
+            - heading "TOE Classification" [level=2] [ref=e692]
+            - table "TOE classification" [ref=e693]:
+              - rowgroup [ref=e694]:
+                - row "Component Category Classification Notes" [ref=e695]:
+                  - columnheader "Component" [ref=e696]
+                  - columnheader "Category" [ref=e697]
+                  - columnheader "Classification" [ref=e698]
+                  - columnheader "Notes" [ref=e699]
+              - rowgroup
+          - heading "Risk Flags" [level=2] [ref=e701]
+          - heading "AI Recommendations" [level=2] [ref=e703]
+          - generic [ref=e704]:
+            - heading "Reviewer Feedback" [level=2] [ref=e705]
+            - generic [ref=e707]:
+              - generic [ref=e708]: Comments
+              - textbox "Comments" [ref=e709]:
+                - /placeholder: Enter reviewer comments...
+            - generic [ref=e710]:
+              - button "← Back to Edit" [ref=e711] [cursor=pointer]
+              - button "Acknowledge Risks & Save" [ref=e713] [cursor=pointer]

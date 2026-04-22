@@ -1,0 +1,125 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - img "PETRONAS logo" [ref=e5]
+      - navigation "Main navigation" [ref=e22]:
+        - generic [ref=e23]: myHLD Portal
+        - generic [ref=e25]: HLD Authoring & Governance
+  - main [ref=e26]:
+    - generic [ref=e469]:
+      - generic [ref=e470]:
+        - button "Back to dashboard" [ref=e471] [cursor=pointer]: ← Back
+        - heading "Create New HLD" [level=1] [ref=e472]
+      - tablist "HLD creation steps" [ref=e473]:
+        - tab "1 Registration" [ref=e474] [cursor=pointer]:
+          - generic [ref=e475]: "1"
+          - generic [ref=e476]: Registration
+        - tab "2 Application & Data" [selected] [ref=e478] [cursor=pointer]:
+          - generic [ref=e479]: "2"
+          - generic [ref=e480]: Application & Data
+        - tab "3 Cybersecurity" [ref=e482] [cursor=pointer]:
+          - generic [ref=e483]: "3"
+          - generic [ref=e484]: Cybersecurity
+        - tab "4 AI Results" [ref=e486] [cursor=pointer]:
+          - generic [ref=e487]: "4"
+          - generic [ref=e488]: AI Results
+      - text: → →
+      - tabpanel [ref=e543]:
+        - generic [ref=e544]:
+          - heading "Application & Data Management" [level=2] [ref=e545]
+          - heading "Application Components" [level=3] [ref=e546]
+          - generic [ref=e547]:
+            - generic [ref=e548]:
+              - generic [ref=e549]: Application Components
+              - textbox "Application Components" [ref=e550]:
+                - /placeholder: List key application components (e.g., Web Frontend, API Gateway, Backend Services, Database...)
+                - text: SAP S/4HANA Core, SAP BTP, Cloud Foundry Runtime, SAP Integration Suite, SAP HANA Cloud
+            - generic [ref=e551]:
+              - generic [ref=e552]: System Integrations
+              - textbox "System Integrations" [ref=e553]:
+                - /placeholder: Describe integrations with other systems (e.g., SAP via RFC, Salesforce via REST API, LDAP for auth...)
+                - text: SAP S/4HANA via OData, SAP Integration Suite via HTTPS, Azure AD via SAML 2.0, SAP Event Mesh via AMQP
+          - heading "Data Management" [level=3] [ref=e554]
+          - generic [ref=e555]:
+            - generic [ref=e556]:
+              - generic [ref=e557]: Data Classification
+              - combobox "Data Classification" [ref=e558]:
+                - option "Select..."
+                - option "Public"
+                - option "Internal"
+                - option "Confidential" [selected]
+                - option "Restricted"
+            - generic [ref=e559]:
+              - generic [ref=e560]: Data-in-motion Encryption
+              - generic [ref=e561]:
+                - generic [ref=e562] [cursor=pointer]:
+                  - checkbox "TLS 1.2" [checked] [ref=e563]
+                  - generic [ref=e564]: TLS 1.2
+                - generic [ref=e565] [cursor=pointer]:
+                  - checkbox "TLS 1.3" [ref=e566]
+                  - generic [ref=e567]: TLS 1.3
+                - generic [ref=e568] [cursor=pointer]:
+                  - checkbox "AES-256" [checked] [ref=e569]
+                  - generic [ref=e570]: AES-256
+                - generic [ref=e571] [cursor=pointer]:
+                  - checkbox "SHA-2 Hashing" [ref=e572]
+                  - generic [ref=e573]: SHA-2 Hashing
+            - generic [ref=e574]:
+              - generic [ref=e575]: Data-at-rest Encryption
+              - generic [ref=e576]:
+                - generic [ref=e577] [cursor=pointer]:
+                  - checkbox "Database encryption - TDE with AES-256" [checked] [ref=e578]
+                  - generic [ref=e579]: Database encryption - TDE with AES-256
+                - generic [ref=e580] [cursor=pointer]:
+                  - checkbox "Server-side encryption - AES-256" [ref=e581]
+                  - generic [ref=e582]: Server-side encryption - AES-256
+            - generic [ref=e583]:
+              - generic [ref=e584]: Data Integration Approach
+              - generic [ref=e585]:
+                - generic [ref=e586] [cursor=pointer]:
+                  - checkbox "API" [checked] [ref=e587]
+                  - generic [ref=e588]: API
+                - generic [ref=e589] [cursor=pointer]:
+                  - checkbox "ETL" [ref=e590]
+                  - generic [ref=e591]: ETL
+                - generic [ref=e592] [cursor=pointer]:
+                  - checkbox "Middleware" [checked] [ref=e593]
+                  - generic [ref=e594]: Middleware
+            - generic [ref=e595]:
+              - generic [ref=e596]: Data Retention
+              - combobox "Data Retention" [ref=e597]:
+                - option "Select..."
+                - option "1 - 2 Years"
+                - option "1 - 3 Years"
+                - option "5 Years"
+                - option "7 Years" [selected]
+            - generic [ref=e598]:
+              - generic [ref=e599]: Data Privacy
+              - generic [ref=e600]:
+                - generic [ref=e601] [cursor=pointer]:
+                  - checkbox "GDPR" [ref=e602]
+                  - generic [ref=e603]: GDPR
+                - generic [ref=e604] [cursor=pointer]:
+                  - checkbox "ISO/IEC 27701" [ref=e605]
+                  - generic [ref=e606]: ISO/IEC 27701
+                - generic [ref=e607] [cursor=pointer]:
+                  - checkbox "PDPA" [checked] [ref=e608]
+                  - generic [ref=e609]: PDPA
+            - generic [ref=e610]:
+              - generic [ref=e611]: Data Loss Prevention
+              - generic [ref=e612]:
+                - generic [ref=e613] [cursor=pointer]:
+                  - checkbox "Data Classification" [checked] [ref=e614]
+                  - generic [ref=e615]: Data Classification
+                - generic [ref=e616] [cursor=pointer]:
+                  - checkbox "Detection Mechanism" [checked] [ref=e617]
+                  - generic [ref=e618]: Detection Mechanism
+                - generic [ref=e619] [cursor=pointer]:
+                  - checkbox "Policy Declaration" [checked] [ref=e620]
+                  - generic [ref=e621]: Policy Declaration
+                - generic [ref=e622] [cursor=pointer]:
+                  - checkbox "Violation Remediation" [ref=e623]
+                  - generic [ref=e624]: Violation Remediation
+          - generic [ref=e625]:
+            - button "← Back" [ref=e626] [cursor=pointer]
+            - 'button "Next: Cybersecurity →" [ref=e627] [cursor=pointer]'

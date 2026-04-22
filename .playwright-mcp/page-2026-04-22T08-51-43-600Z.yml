@@ -1,0 +1,8 @@
+- generic [active] [ref=e1]:
+  - heading "403 Forbidden" [level=1] [ref=e2]
+  - list [ref=e3]:
+    - listitem [ref=e4]: "Code: AccessDenied"
+    - listitem [ref=e5]: "Message: Access Denied"
+    - listitem [ref=e6]: "RequestId: W9YM5V3ZYVCB1FJ7"
+    - listitem [ref=e7]: "HostId: ZeOTL8vlHn8tZrGoNNh988ziZbr487RcN/tKd4CHEPc6J418pwWNlnnDP4fA7F/vTH0DXdbh2j3OFffbMqQziMXU/YXvtfUd"
+  - separator [ref=e8]
