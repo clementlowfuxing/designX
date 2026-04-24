@@ -40,18 +40,38 @@
 
 ## The AI Moment
 
-**Template-based input → AI-generated architecture design.** The user fills structured form fields across three steps (registration, application/data, cybersecurity). Bedrock processes all inputs in a single call and returns a Mermaid diagram, TOE classification table, risk flags with rationale, and recommendations. This is the single real Bedrock call. No diagram upload for MVP.
+Two real Bedrock interactions:
+
+1. **Form submission → AI-generated architecture design.** The user fills structured form fields across three steps (registration, application/data, cybersecurity). Bedrock processes all inputs in a single call and returns a Mermaid diagram, TOE classification table, risk flags with rationale, and recommendations.
+2. **Chatbot panel → contextual AI assistance.** While filling the wizard, the user can ask the Bedrock Assistant questions in a persistent side panel. The assistant has context of the current form state and can suggest field values, explain security requirements, or answer architecture questions. Responses may include an "Apply to Form" action that pre-fills the relevant field directly. This is the second real Bedrock call — triggered per user message.
 
 ## UI/UX Shape
 
-- **Page structure:** Multi-step wizard with tabs/steps (per Q8.1 answer B)
-- **Input method:** Structured form fields only — dropdowns, checkboxes, free-text where appropriate. No diagram upload.
-- **Output format:** 
+- **Page structure:** Three-column layout:
+  - Left sidebar — navigation (Overview, HLD Generator, File Vault, Security Audit, History) with active state in emerald, plus a "New Analysis" pill button at the bottom
+  - Centre main area — multi-step wizard (Registration → Application → Security) with step progress indicator at the top; form cards below
+  - Right panel — persistent Bedrock Assistant chatbot (fixed width ~300px), always visible while the wizard is open
+
+- **Input method:** Structured form fields only — dropdowns, checkboxes, free-text where appropriate. No diagram upload. AI-prefilled fields show an "AI POPULATED" badge (emerald pill) on the field border.
+
+- **Chatbot panel (Bedrock Assistant):**
+  - Header: "Bedrock Assistant" with status indicator ("ONLINE & ANALYZING"), close (×) button
+  - Message thread: alternating user messages (emerald bubble, right-aligned) and AI responses (white card, left-aligned)
+  - AI response cards may include:
+    - A labelled "AI SUGGESTION" header with a spark/AI icon
+    - Bold key terms within the response body
+    - An "Apply to Form" action button (pill, emerald outline) that writes the suggestion directly into the relevant wizard field
+  - Quick-action chips above the input bar (e.g., "Compliance check?", "Cost estimate?") — tapping pre-fills the input
+  - Input bar at the bottom: text field ("Ask Bedrock a question…"), attachment icon, send button (emerald filled circle with arrow icon)
+  - The assistant is context-aware: it knows which wizard step is active and which fields are currently filled
+
+- **Output format (post-submission):**
   - Mermaid HLD diagram rendered via mermaid.js — includes components, integration flows with protocol labels, impacted systems, data flows, security boundaries
   - Integration summary table (source system | target system | protocol | integration type | direction)
   - Structured TOE table (component | category | classification | notes)
   - Risk flags as cards with severity badge, rationale text, and confidence percentage
   - Recommendations as actionable text blocks
+
 - **Branding:** Full PETRONAS brand guidelines — emerald header with white logo, Museo Sans font, pill buttons (100px radius), 10px card radius, emerald focus rings, all per steering doc.
 
 ## Model Selection
@@ -70,7 +90,6 @@
 - Diagram upload / image interpretation (FR-13 to FR-15) — template-based only
 - User authentication / RBAC (FR-38, NFR-SEC-01) — unauthenticated demo URL
 - Parent-child HLD versioning (FR-05 to FR-07) — hardcoded sample lineage
-- AI Chatbot / FAQ (FR-34 to FR-39) — deferred to follow-up
 - Application traceability / duplicate detection (FR-31 to FR-33) — lineage display only, no automated duplicate blocking
 - Audit trail (NFR-AUD-01, NFR-AUD-02)
 - Editable generated diagrams (FR-20) — view-only for MVP

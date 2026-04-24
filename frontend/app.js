@@ -144,6 +144,7 @@ function showDashboard() {
   document.getElementById("dashboard-view").classList.add("active");
   document.getElementById("wizard-view").classList.remove("active");
   document.getElementById("detail-view").classList.remove("active");
+  hideChatbot();
 }
 
 function showCreateHLD() {
@@ -151,6 +152,7 @@ function showCreateHLD() {
   document.getElementById("wizard-view").classList.add("active");
   document.getElementById("detail-view").classList.remove("active");
   goToStep(1);
+  showChatbotFAB();
 }
 
 function goToStep(step) {
@@ -700,4 +702,198 @@ function renderDetailFields(fields) {
 function renderChips(arr) {
   if (!arr || !arr.length) return '<span style="color:var(--text-muted)">—</span>';
   return arr.map(v => `<span class="chip">${v}</span>`).join("");
+}
+
+// ── Chatbot Panel ──
+let chatbotOpen = false;
+let chatbotBusy = false;
+
+function toggleChatbot() {
+  chatbotOpen = !chatbotOpen;
+  const panel = document.getElementById("chatbot-panel");
+  const fab = document.getElementById("chatbot-fab");
+  if (chatbotOpen) {
+    panel.style.display = "flex";
+    fab.style.display = "none";
+    if (document.getElementById("chatbot-messages").children.length === 0) {
+      appendAssistantGreeting();
+    }
+    document.getElementById("chatbot-input").focus();
+  } else {
+    panel.style.display = "none";
+    fab.style.display = "flex";
+  }
+}
+
+function showChatbotFAB() {
+  document.getElementById("chatbot-fab").style.display = "flex";
+  if (chatbotOpen) {
+    document.getElementById("chatbot-panel").style.display = "flex";
+  }
+}
+
+function hideChatbot() {
+  document.getElementById("chatbot-fab").style.display = "none";
+  document.getElementById("chatbot-panel").style.display = "none";
+}
+
+function appendAssistantGreeting() {
+  appendSuggestionCard(
+    "Hello! I'm your Bedrock Assistant. I can help you fill in form fields, suggest security controls, or answer architecture questions. What would you like to know?",
+    null
+  );
+}
+
+function onChatKeydown(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
+}
+
+function sendQuickMessage(text) {
+  document.getElementById("chatbot-input").value = text;
+  sendChatMessage();
+}
+
+async function sendChatMessage() {
+  if (chatbotBusy) return;
+  const input = document.getElementById("chatbot-input");
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = "";
+  appendUserMessage(text);
+  const typingId = appendTypingIndicator();
+  chatbotBusy = true;
+  setSendDisabled(true);
+
+  try {
+    const formContext = collectFormData();
+    const response = await fetch(LAMBDA_URL.replace("/generate", "/chat"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: text,
+        currentStep,
+        formContext
+      })
+    });
+
+    removeTypingIndicator(typingId);
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const result = await response.json();
+
+    if (result.suggestion && result.applyTarget) {
+      appendSuggestionCard(result.reply, result.suggestion, result.applyTarget, result.applyValue);
+    } else {
+      appendAssistantMessage(result.reply || "I couldn't generate a response. Please try again.");
+    }
+  } catch (err) {
+    removeTypingIndicator(typingId);
+    appendAssistantMessage("Sorry, I'm having trouble connecting right now. Please try again.");
+    console.error("Chat error:", err);
+  } finally {
+    chatbotBusy = false;
+    setSendDisabled(false);
+    input.focus();
+  }
+}
+
+function setSendDisabled(disabled) {
+  document.querySelector(".chatbot-send").disabled = disabled;
+}
+
+function appendUserMessage(text) {
+  const msgs = document.getElementById("chatbot-messages");
+  const div = document.createElement("div");
+  div.className = "chat-msg user";
+  div.innerHTML = `<div class="chat-bubble">${escapeHtml(text)}</div><div class="chat-time">${chatTime()}</div>`;
+  msgs.appendChild(div);
+  scrollChatToBottom();
+}
+
+function appendAssistantMessage(text) {
+  const msgs = document.getElementById("chatbot-messages");
+  const div = document.createElement("div");
+  div.className = "chat-msg assistant";
+  div.innerHTML = `<div class="chat-bubble">${text}</div><div class="chat-time">${chatTime()}</div>`;
+  msgs.appendChild(div);
+  scrollChatToBottom();
+}
+
+function appendSuggestionCard(replyText, suggestionText, applyTarget, applyValue) {
+  const msgs = document.getElementById("chatbot-messages");
+  const div = document.createElement("div");
+  div.className = "chat-suggestion-card";
+
+  const sparkIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#00A19C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  let html = `<div class="chat-suggestion-label">${sparkIcon} AI SUGGESTION</div>
+    <div class="chat-suggestion-text">${replyText}</div>`;
+
+  if (suggestionText && applyTarget) {
+    html += `<button class="chat-apply-btn" onclick="applyToForm('${escapeAttr(applyTarget)}', '${escapeAttr(applyValue || suggestionText)}', this)">
+      ${sparkIcon} Apply to Form
+    </button>`;
+  }
+
+  div.innerHTML = html;
+  msgs.appendChild(div);
+  scrollChatToBottom();
+}
+
+function appendTypingIndicator() {
+  const msgs = document.getElementById("chatbot-messages");
+  const id = "typing-" + Date.now();
+  const div = document.createElement("div");
+  div.className = "chat-msg assistant chat-typing";
+  div.id = id;
+  div.innerHTML = `<div class="chat-bubble"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+  msgs.appendChild(div);
+  scrollChatToBottom();
+  return id;
+}
+
+function removeTypingIndicator(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function applyToForm(target, value, btn) {
+  const el = document.getElementById(target);
+  if (!el) return;
+  if (el.tagName === "SELECT") {
+    // Try to match option by value or text
+    const opts = Array.from(el.options);
+    const match = opts.find(o => o.value === value || o.text.toLowerCase().includes(value.toLowerCase()));
+    if (match) el.value = match.value;
+  } else {
+    el.value = value;
+  }
+  el.classList.add("prefilled");
+  el.dispatchEvent(new Event("change"));
+  btn.textContent = "✓ Applied";
+  btn.disabled = true;
+  btn.style.background = "var(--p-emerald)";
+  btn.style.color = "#fff";
+}
+
+function scrollChatToBottom() {
+  const msgs = document.getElementById("chatbot-messages");
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function chatTime() {
+  const now = new Date();
+  return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function escapeAttr(str) {
+  return (str || "").replace(/'/g, "\\'").replace(/"/g, "&quot;");
 }

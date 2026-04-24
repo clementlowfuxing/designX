@@ -1,0 +1,9 @@
+{
+  "requestContext": {
+    "http": {
+      "method": "POST"
+    }
+  },
+  "rawPath": "/chat",
+  "body": "{\"message\":\"What security protocols should I select for a cloud-based ERP handling confidential data?\",\"currentStep\":3,\"formContext\":{\"registration\":{\"category\":\"New Application HLD\",\"application\":\"SAP S/4HANA\",\"title\":\"SAP Migration to Cloud\",\"hldType\":\"ERP Application\",\"landscape\":\"Enterprise Cloud\",\"division\":\"Upstream\"},\"applicationData\":{\"dataClassification\":\"Confidential\"},\"cybersecurity\":{\"bia\":{\"overall\":\"Major\"}}}}"
+}

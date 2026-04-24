@@ -1,0 +1,9 @@
+{
+  "requestContext": {
+    "http": {
+      "method": "POST"
+    }
+  },
+  "rawPath": "/generate",
+  "body": "{\"registration\":{\"title\":\"Test HLD\",\"application\":\"Test App\",\"category\":\"New Application HLD\",\"hldType\":\"Non-ERP Application\",\"landscape\":\"Enterprise Cloud\",\"division\":\"Corporate\"},\"applicationData\":{\"components\":\"Web App, API, Database\",\"integrations\":\"SAP via RFC\",\"dataClassification\":\"Internal\",\"dataInMotion\":[\"TLS 1.2\"],\"dataAtRest\":[],\"dataIntegration\":[\"API\"],\"dataRetention\":\"5 Years\",\"dataPrivacy\":[\"PDPA\"],\"dataLossPrevention\":[]},\"cybersecurity\":{\"bia\":{\"confidentiality\":\"Moderate\",\"integrity\":\"Moderate\",\"availability\":\"Moderate\",\"overall\":\"Moderate\"},\"ha\":[],\"dr\":[],\"connectivity\":[\"HTTPS\"],\"iam\":{\"authenticationApproach\":[\"SAML\"],\"accessControl\":[\"Role Based\"],\"sso\":[\"Microsoft Entra ID\"],\"keyManagement\":[],\"crossDomain\":[],\"clientServerAuth\":[\"JWT\"],\"cloudAccess\":[\"API\"],\"authorization\":[],\"authImplementation\":[\"Azure AD Authentication (Cloud AD)\"]},\"endpoint\":{\"hardenedEndpoint\":[\"Server\"],\"endpointProtection\":[\"MDE\"],\"cybersecurityOversight\":[]},\"applicationSecurity\":{\"appDevelopment\":[\"In-house\"],\"secureAppDev\":[],\"appFacing\":[\"Internal Users\"]},\"securityTesting\":{\"vawa\":[],\"devSecOps\":[]},\"networkSecurity\":{\"perimeterSecurity\":[\"Firewall - Next Generation Firewall\"],\"networkDLP\":[],\"networkConnectivity\":[\"PETRONET\"],\"pam\":[]}}}"
+}

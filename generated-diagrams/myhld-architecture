@@ -1,0 +1,48 @@
+digraph "myHLD Portal Architecture" {
+	graph [fontcolor="#2D3436" fontname="Sans-Serif" fontsize=15 label="myHLD Portal Architecture" nodesep=0.60 pad=2.0 rankdir=LR ranksep=0.75 splines=ortho]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	c6ca6ef224ee438cb683a0da45041dd8 [label="User Browser" height=1.9 image="C:\Users\clementlow.fuxing\AppData\Local\uv\cache\archive-v0\GpUg1B3h2nfqgBJyiLs-s\Lib\site-packages\resources/aws/general\user.png" shape=none]
+	subgraph "cluster_Frontend Delivery" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Frontend Delivery" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"5d8fab44a6e84685aebef1f1c9630c3f" [label="CloudFront
+E3Q04VWBORWUMU" height=2.3 image="C:\Users\clementlow.fuxing\AppData\Local\uv\cache\archive-v0\GpUg1B3h2nfqgBJyiLs-s\Lib\site-packages\resources/aws/network\cloudfront.png" shape=none]
+		e495ace3ed764eaeb5d0fa427d269801 [label="S3 Bucket
+myhld-portal-frontend" height=2.3 image="C:\Users\clementlow.fuxing\AppData\Local\uv\cache\archive-v0\GpUg1B3h2nfqgBJyiLs-s\Lib\site-packages\resources/aws/storage\simple-storage-service-s3.png" shape=none]
+	}
+	subgraph "cluster_API Layer" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="API Layer" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		a47967fbb4c444b5803ede3cf92c96a9 [label="API Gateway
+1baqekfcrh" height=2.3 image="C:\Users\clementlow.fuxing\AppData\Local\uv\cache\archive-v0\GpUg1B3h2nfqgBJyiLs-s\Lib\site-packages\resources/aws/mobile\api-gateway.png" shape=none]
+	}
+	subgraph cluster_Compute {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=Compute labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"8ee775b65b9c4f1294ddd497dde2f687" [label="Lambda
+myhld-portal-backend" height=2.3 image="C:\Users\clementlow.fuxing\AppData\Local\uv\cache\archive-v0\GpUg1B3h2nfqgBJyiLs-s\Lib\site-packages\resources/aws/compute\lambda.png" shape=none]
+	}
+	subgraph cluster_AI {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=AI labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"2a7f99353e844517882fdfd5a6a47691" [label="Amazon Bedrock
+Nova Pro v1" height=2.3 image="C:\Users\clementlow.fuxing\AppData\Local\uv\cache\archive-v0\GpUg1B3h2nfqgBJyiLs-s\Lib\site-packages\resources/aws/ml\bedrock.png" shape=none]
+	}
+	subgraph cluster_Database {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=Database labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		d1ba092dbd2a4b5896103bfb11fab16d [label="DynamoDB
+myhld-portal-hld-records" height=2.3 image="C:\Users\clementlow.fuxing\AppData\Local\uv\cache\archive-v0\GpUg1B3h2nfqgBJyiLs-s\Lib\site-packages\resources/aws/database\dynamodb-table.png" shape=none]
+	}
+	subgraph cluster_Monitoring {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=Monitoring labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"7ca34000c74d44a8bca98e0392117d33" [label="CloudWatch Logs" height=1.9 image="C:\Users\clementlow.fuxing\AppData\Local\uv\cache\archive-v0\GpUg1B3h2nfqgBJyiLs-s\Lib\site-packages\resources/aws/management\cloudwatch-logs.png" shape=none]
+	}
+	f8b41373695345cebf8ecd40c36d9541 [label="IAM Role
+myhld-portal-lambda-role" height=2.3 image="C:\Users\clementlow.fuxing\AppData\Local\uv\cache\archive-v0\GpUg1B3h2nfqgBJyiLs-s\Lib\site-packages\resources/aws/security\identity-and-access-management-iam-role.png" shape=none]
+	c6ca6ef224ee438cb683a0da45041dd8 -> "5d8fab44a6e84685aebef1f1c9630c3f" [label=HTTPS dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"5d8fab44a6e84685aebef1f1c9630c3f" -> e495ace3ed764eaeb5d0fa427d269801 [label=OAC dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	c6ca6ef224ee438cb683a0da45041dd8 -> a47967fbb4c444b5803ede3cf92c96a9 [label="POST /generate
+POST /chat" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=bold]
+	a47967fbb4c444b5803ede3cf92c96a9 -> "8ee775b65b9c4f1294ddd497dde2f687" [label=Integration dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"8ee775b65b9c4f1294ddd497dde2f687" -> "2a7f99353e844517882fdfd5a6a47691" [label="Converse API" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"8ee775b65b9c4f1294ddd497dde2f687" -> d1ba092dbd2a4b5896103bfb11fab16d [label="PutItem / Scan" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"8ee775b65b9c4f1294ddd497dde2f687" -> "7ca34000c74d44a8bca98e0392117d33" [label=Logs dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	f8b41373695345cebf8ecd40c36d9541 -> "8ee775b65b9c4f1294ddd497dde2f687" [dir=none fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+}

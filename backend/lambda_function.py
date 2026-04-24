@@ -29,13 +29,20 @@ CORS_HEADERS = {
 def lambda_handler(event, context):
     """Main handler for API Gateway HTTP API (payload format 2.0)."""
     method = event.get("requestContext", {}).get("http", {}).get("method", "")
+    path = event.get("rawPath", event.get("requestContext", {}).get("http", {}).get("path", ""))
+
     if method == "OPTIONS":
         return {"statusCode": 200, "headers": CORS_HEADERS, "body": ""}
 
     try:
         body = json.loads(event.get("body", "{}"))
-        result = generate_hld(body)
-        save_hld(body, result)
+
+        if path.endswith("/chat"):
+            result = handle_chat(body)
+        else:
+            result = generate_hld(body)
+            save_hld(body, result)
+
         return {
             "statusCode": 200,
             "headers": CORS_HEADERS,
@@ -186,3 +193,76 @@ def save_hld(form_data, ai_result):
     except Exception as e:
         logger.error(f"DynamoDB save failed: {e}")
         # Non-blocking — don't fail the response if save fails
+
+
+def handle_chat(body):
+    """Handle a chatbot message with form context awareness."""
+    message = body.get("message", "")
+    current_step = body.get("currentStep", 1)
+    form_context = body.get("formContext", {})
+
+    reg = form_context.get("registration", {})
+    app_data = form_context.get("applicationData", {})
+    cyber = form_context.get("cybersecurity", {})
+
+    step_labels = {1: "Registration", 2: "Application & Data", 3: "Cybersecurity & Compliance", 4: "AI Results"}
+    step_name = step_labels.get(current_step, "Registration")
+
+    # Summarise what's filled so far for context
+    filled_summary = f"""
+Current wizard step: {step_name}
+
+Registration so far:
+- Category: {reg.get('category') or 'not set'}
+- Application: {reg.get('application') or 'not set'}
+- Title: {reg.get('title') or 'not set'}
+- HLD Type: {reg.get('hldType') or 'not set'}
+- Landscape: {reg.get('landscape') or 'not set'}
+- Division: {reg.get('division') or 'not set'}
+
+Application & Data so far:
+- Components: {app_data.get('components') or 'not set'}
+- Integrations: {app_data.get('integrations') or 'not set'}
+- Data Classification: {app_data.get('dataClassification') or 'not set'}
+
+Cybersecurity so far:
+- BIA Overall: {cyber.get('bia', {}).get('overall') or 'not set'}
+- Connectivity: {', '.join(cyber.get('connectivity', [])) or 'not set'}
+"""
+
+    prompt = f"""You are the Bedrock Assistant embedded in the myHLD Portal — an enterprise HLD (High-Level Design) authoring tool for PETRONAS.
+
+The user is currently on the wizard step: {step_name}.
+
+Here is the current state of their form:
+{filled_summary}
+
+The user asks: "{message}"
+
+Your job is to:
+1. Answer their question helpfully and concisely in the context of enterprise architecture and PETRONAS HLD governance.
+2. If your answer includes a specific value that could be applied to a form field, identify the best target field and value.
+
+Respond with a JSON object with these keys:
+- "reply": Your response text (max 3 sentences, plain text, you may use <strong> tags for emphasis)
+- "suggestion": (optional) The specific suggested value to apply to a form field, or null
+- "applyTarget": (optional) The HTML element ID of the form field to apply to. Valid IDs: hld-title, hld-description, hld-type, hld-landscape, hld-division, app-components, app-integrations, data-classification, data-retention, bia-confidentiality, bia-integrity, bia-availability, bia-overall. Use null if no field applies.
+- "applyValue": (optional) The exact value to set on the field (must match a valid option for dropdowns), or null
+
+Return ONLY valid JSON. No markdown fences."""
+
+    response = bedrock.converse(
+        modelId=MODEL_ID,
+        messages=[{"role": "user", "content": [{"text": prompt}]}],
+        inferenceConfig={"maxTokens": 400, "temperature": 0.4},
+    )
+
+    raw = response["output"]["message"]["content"][0]["text"].strip()
+    if raw.startswith("```"):
+        raw = raw.split("\n", 1)[1] if "\n" in raw else raw[3:]
+        if raw.endswith("```"):
+            raw = raw[:-3]
+        raw = raw.strip()
+
+    result = json.loads(raw)
+    return result
