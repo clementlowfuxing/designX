@@ -707,34 +707,51 @@ function renderChips(arr) {
 // ── Chatbot Panel ──
 let chatbotOpen = false;
 let chatbotBusy = false;
+let chatMode = "qa"; // "qa" or "intake"
+let intakeConversation = []; // conversation history for intake mode
+let intakeExtraction = {}; // current extracted form data
 
 function toggleChatbot() {
   chatbotOpen = !chatbotOpen;
+  const layout = document.getElementById("wizard-layout");
   const panel = document.getElementById("chatbot-panel");
-  const fab = document.getElementById("chatbot-fab");
+  const toggleBtn = document.getElementById("chatbot-toggle-btn");
+  const toggleLabel = document.getElementById("chatbot-toggle-label");
+
   if (chatbotOpen) {
+    layout.classList.add("chat-open");
     panel.style.display = "flex";
-    fab.style.display = "none";
+    toggleBtn.classList.add("active");
+    toggleLabel.textContent = "Close Assistant";
+    document.body.classList.add("chat-expanded");
     if (document.getElementById("chatbot-messages").children.length === 0) {
       appendAssistantGreeting();
     }
     document.getElementById("chatbot-input").focus();
   } else {
+    layout.classList.remove("chat-open");
     panel.style.display = "none";
-    fab.style.display = "flex";
+    toggleBtn.classList.remove("active");
+    toggleLabel.textContent = "AI Assistant";
+    document.body.classList.remove("chat-expanded");
   }
 }
 
 function showChatbotFAB() {
-  document.getElementById("chatbot-fab").style.display = "flex";
-  if (chatbotOpen) {
-    document.getElementById("chatbot-panel").style.display = "flex";
-  }
+  // Toggle button is always visible in wizard — no action needed
 }
 
 function hideChatbot() {
-  document.getElementById("chatbot-fab").style.display = "none";
-  document.getElementById("chatbot-panel").style.display = "none";
+  chatbotOpen = false;
+  const layout = document.getElementById("wizard-layout");
+  const panel = document.getElementById("chatbot-panel");
+  const toggleBtn = document.getElementById("chatbot-toggle-btn");
+  const toggleLabel = document.getElementById("chatbot-toggle-label");
+  if (layout) layout.classList.remove("chat-open");
+  if (panel) panel.style.display = "none";
+  if (toggleBtn) toggleBtn.classList.remove("active");
+  if (toggleLabel) toggleLabel.textContent = "AI Assistant";
+  document.body.classList.remove("chat-expanded");
 }
 
 function appendAssistantGreeting() {
@@ -769,26 +786,10 @@ async function sendChatMessage() {
   setSendDisabled(true);
 
   try {
-    const formContext = collectFormData();
-    const response = await fetch(LAMBDA_URL.replace("/generate", "/chat"), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: text,
-        currentStep,
-        formContext
-      })
-    });
-
-    removeTypingIndicator(typingId);
-
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const result = await response.json();
-
-    if (result.suggestion && result.applyTarget) {
-      appendSuggestionCard(result.reply, result.suggestion, result.applyTarget, result.applyValue);
+    if (chatMode === "intake") {
+      await handleIntakeMessage(text, typingId);
     } else {
-      appendAssistantMessage(result.reply || "I couldn't generate a response. Please try again.");
+      await handleQAMessage(text, typingId);
     }
   } catch (err) {
     removeTypingIndicator(typingId);
@@ -799,6 +800,237 @@ async function sendChatMessage() {
     setSendDisabled(false);
     input.focus();
   }
+}
+
+async function handleQAMessage(text, typingId) {
+  const formContext = collectFormData();
+  const response = await fetch(LAMBDA_URL.replace("/generate", "/chat"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ mode: "qa", message: text, currentStep, formContext })
+  });
+
+  removeTypingIndicator(typingId);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const result = await response.json();
+
+  if (result.suggestion && result.applyTarget) {
+    appendSuggestionCard(result.reply, result.suggestion, result.applyTarget, result.applyValue);
+  } else {
+    appendAssistantMessage(result.reply || "I couldn't generate a response. Please try again.");
+  }
+}
+
+async function handleIntakeMessage(text, typingId) {
+  // Add user message to conversation history
+  intakeConversation.push({ role: "user", text });
+
+  const response = await fetch(LAMBDA_URL.replace("/generate", "/chat"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      mode: "intake",
+      conversation: intakeConversation,
+      currentExtraction: intakeExtraction
+    })
+  });
+
+  removeTypingIndicator(typingId);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const result = await response.json();
+
+  // Update extraction state
+  if (result.extraction) {
+    intakeExtraction = result.extraction;
+  }
+
+  // Add assistant reply to conversation history
+  const reply = result.reply || "I've noted that. Could you tell me more?";
+  intakeConversation.push({ role: "assistant", text: reply });
+
+  // Show reply
+  appendAssistantMessage(reply);
+
+  // Show follow-up questions as clickable buttons
+  if (result.followUpQuestions && result.followUpQuestions.length > 0) {
+    appendFollowUpQuestions(result.followUpQuestions);
+  }
+
+  // Update progress tracker
+  updateIntakeProgress(result.filledCount || 0, result.totalCount || 30);
+}
+
+// ── Chat Mode Toggle ──
+function setChatMode(mode) {
+  chatMode = mode;
+  document.getElementById("mode-qa").classList.toggle("active", mode === "qa");
+  document.getElementById("mode-intake").classList.toggle("active", mode === "intake");
+
+  // Toggle progress tracker
+  document.getElementById("chatbot-progress").style.display = mode === "intake" ? "block" : "none";
+
+  // Toggle quick chips
+  document.getElementById("chatbot-chips").style.display = mode === "qa" ? "flex" : "none";
+  document.getElementById("chatbot-intake-chips").style.display = mode === "intake" ? "flex" : "none";
+
+  // Clear messages and reset for new mode
+  const msgs = document.getElementById("chatbot-messages");
+  msgs.innerHTML = "";
+
+  if (mode === "intake") {
+    intakeConversation = [];
+    intakeExtraction = {};
+    updateIntakeProgress(0, 30);
+    appendAssistantMessage("Let's build your HLD through conversation. Describe your application — what it does, which division it's for, what systems it integrates with, and any security requirements you know. I'll extract the details and fill the form for you.");
+  } else {
+    appendAssistantGreeting();
+  }
+}
+
+function updateIntakeProgress(filled, total) {
+  const pct = Math.round((filled / total) * 100);
+  document.getElementById("progress-bar-fill").style.width = pct + "%";
+  document.getElementById("progress-label").textContent = `${filled} / ${total} fields captured`;
+
+  // Count per section
+  const ext = intakeExtraction;
+  const reg = ext.registration || {};
+  const app = ext.applicationData || {};
+  const sec = ext.cybersecurity || {};
+
+  const regCount = countFilled(reg);
+  const appCount = countFilled(app);
+  const secCount = countFilledDeep(sec);
+
+  const progReg = document.getElementById("prog-reg");
+  const progApp = document.getElementById("prog-app");
+  const progSec = document.getElementById("prog-sec");
+
+  progReg.textContent = `Registration: ${regCount}/7`;
+  progApp.textContent = `App & Data: ${appCount}/9`;
+  progSec.textContent = `Security: ${secCount}/14`;
+
+  progReg.classList.toggle("complete", regCount >= 5);
+  progApp.classList.toggle("complete", appCount >= 5);
+  progSec.classList.toggle("complete", secCount >= 5);
+
+  // Enable review button when enough fields are filled
+  const reviewBtn = document.getElementById("chatbot-review-btn");
+  reviewBtn.disabled = filled < 8;
+}
+
+function countFilled(obj) {
+  let count = 0;
+  Object.values(obj).forEach(v => {
+    if (Array.isArray(v) ? v.length > 0 : (v && v !== "")) count++;
+  });
+  return count;
+}
+
+function countFilledDeep(obj) {
+  let count = 0;
+  Object.values(obj).forEach(v => {
+    if (typeof v === "object" && !Array.isArray(v) && v !== null) {
+      count += countFilled(v);
+    } else if (Array.isArray(v) ? v.length > 0 : (v && v !== "")) {
+      count++;
+    }
+  });
+  return count;
+}
+
+function appendFollowUpQuestions(questions) {
+  const msgs = document.getElementById("chatbot-messages");
+  const div = document.createElement("div");
+  div.className = "chat-followup-questions";
+  div.innerHTML = questions.map(q =>
+    `<button class="chat-followup-btn" onclick="sendFollowUpAnswer(this, '${escapeAttr(q)}')">${escapeHtml(q)}</button>`
+  ).join("");
+  msgs.appendChild(div);
+  scrollChatToBottom();
+}
+
+function sendFollowUpAnswer(btn, question) {
+  // Put the question text into the input so the user can answer it
+  document.getElementById("chatbot-input").value = "";
+  document.getElementById("chatbot-input").placeholder = question;
+  document.getElementById("chatbot-input").focus();
+}
+
+// ── Review & Generate from Intake ──
+function reviewIntakeAndGenerate() {
+  if (!intakeExtraction || !intakeExtraction.registration) return;
+
+  // Switch to wizard view and prefill all fields from extraction
+  showCreateHLD();
+
+  const ext = intakeExtraction;
+  const reg = ext.registration || {};
+  const appData = ext.applicationData || {};
+  const cyber = ext.cybersecurity || {};
+
+  // Clear any existing prefill
+  clearPrefill();
+
+  // Show a prefill banner indicating data came from chat
+  const banner = document.createElement("div");
+  banner.className = "prefill-banner";
+  banner.innerHTML = `<span class="prefill-icon">&#9432;</span> Fields prefilled from <strong>AI Chat Intake</strong>. Review and modify as needed before generating.`;
+  const card = document.querySelector("#step-1 .card");
+  card.insertBefore(banner, card.querySelector("h2").nextSibling);
+
+  // Step 1: Registration
+  if (reg.category) setAndMark("hld-category", reg.category);
+  if (reg.title) { setTextAndMark("hld-title", reg.title); }
+  if (reg.description) { setTextAndMark("hld-description", reg.description); }
+  if (reg.hldType) setAndMark("hld-type", reg.hldType);
+  if (reg.landscape) setAndMark("hld-landscape", reg.landscape);
+  if (reg.division) setAndMark("hld-division", reg.division);
+
+  // Step 2: Application & Data
+  if (appData.components) setTextAndMark("app-components", appData.components);
+  if (appData.integrations) setTextAndMark("app-integrations", appData.integrations);
+  if (appData.dataClassification) setAndMark("data-classification", appData.dataClassification);
+  if (appData.dataRetention) setAndMark("data-retention", appData.dataRetention);
+  if (appData.dataInMotion?.length) checkAndMark("data-in-motion", appData.dataInMotion);
+  if (appData.dataAtRest?.length) checkAndMark("data-at-rest", appData.dataAtRest);
+  if (appData.dataIntegration?.length) checkAndMark("data-integration", appData.dataIntegration);
+  if (appData.dataPrivacy?.length) checkAndMark("data-privacy", appData.dataPrivacy);
+  if (appData.dataLossPrevention?.length) checkAndMark("data-dlp", appData.dataLossPrevention);
+
+  // Step 3: Cybersecurity
+  const bia = cyber.bia || {};
+  if (bia.confidentiality) setAndMark("bia-confidentiality", bia.confidentiality);
+  if (bia.integrity) setAndMark("bia-integrity", bia.integrity);
+  if (bia.availability) { setAndMark("bia-availability", bia.availability); onBIAAvailabilityChange(); }
+  if (bia.overall) setAndMark("bia-overall", bia.overall);
+  if (cyber.ha?.length) checkAndMark("ha-options", cyber.ha);
+  if (cyber.dr?.length) checkAndMark("dr-options", cyber.dr);
+  if (cyber.connectivity?.length) checkAndMark("sec-connectivity", cyber.connectivity);
+
+  // IAM
+  const iam = cyber.iam || {};
+  Object.entries(iam).forEach(([key, vals]) => {
+    if (vals && vals.length) checkAndMark(`sec-${key}`, vals);
+  });
+  // Endpoint
+  const ep = cyber.endpoint || {};
+  Object.entries(ep).forEach(([key, vals]) => {
+    if (vals && vals.length) checkAndMark(`sec-${key}`, vals);
+  });
+  // App Security
+  const as = cyber.applicationSecurity || {};
+  Object.entries(as).forEach(([key, vals]) => {
+    if (vals && vals.length) checkAndMark(`sec-${key}`, vals);
+  });
+  // Network Security
+  const ns = cyber.networkSecurity || {};
+  Object.entries(ns).forEach(([key, vals]) => {
+    if (vals && vals.length) checkAndMark(`sec-${key}`, vals);
+  });
+
+  // Close chatbot and let user review
+  if (chatbotOpen) toggleChatbot();
 }
 
 function setSendDisabled(disabled) {

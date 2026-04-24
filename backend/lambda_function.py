@@ -196,7 +196,125 @@ def save_hld(form_data, ai_result):
 
 
 def handle_chat(body):
-    """Handle a chatbot message with form context awareness."""
+    """Route chat requests to Q&A or intake mode."""
+    mode = body.get("mode", "qa")
+    if mode == "intake":
+        return handle_chat_intake(body)
+    return handle_chat_qa(body)
+
+
+def handle_chat_intake(body):
+    """Handle conversational HLD intake — extract form fields from conversation."""
+    conversation = body.get("conversation", [])
+    current_extraction = body.get("currentExtraction", {})
+
+    # Build the full valid-options reference for the extraction prompt
+    prompt = build_intake_prompt(conversation, current_extraction)
+
+    response = bedrock.converse(
+        modelId=MODEL_ID,
+        messages=[{"role": "user", "content": [{"text": prompt}]}],
+        inferenceConfig={"maxTokens": 2500, "temperature": 0.2},
+    )
+
+    raw = response["output"]["message"]["content"][0]["text"].strip()
+    if raw.startswith("```"):
+        raw = raw.split("\n", 1)[1] if "\n" in raw else raw[3:]
+        if raw.endswith("```"):
+            raw = raw[:-3]
+        raw = raw.strip()
+
+    result = json.loads(raw)
+    return result
+
+
+def build_intake_prompt(conversation, current_extraction):
+    """Build the slot-filling extraction prompt."""
+    conv_text = ""
+    for msg in conversation:
+        role = msg.get("role", "user")
+        text = msg.get("text", "")
+        conv_text += f"\n{'USER' if role == 'user' else 'ASSISTANT'}: {text}"
+
+    current_json = json.dumps(current_extraction, indent=2) if current_extraction else "{}"
+
+    return f"""You are an HLD intake assistant for the myHLD Portal at PETRONAS. Your job is to extract structured HLD form fields from a natural language conversation.
+
+## CONVERSATION SO FAR
+{conv_text}
+
+## CURRENT EXTRACTION STATE
+{current_json}
+
+## VALID OPTIONS FOR EACH FIELD
+
+Registration:
+- category: "New Application HLD" | "Enhancement HLD"
+- application: free text (application name)
+- title: free text
+- description: free text
+- hldType: "ERP Application" | "Infrastructure" | "Non-ERP Application"
+- landscape: "Enterprise Cloud" | "On-Premise" | "SaaS"
+- division: "Corporate" | "Downstream" | "Gentari" | "PT & HSSE" | "Gas & Maritime" | "Upstream" | "Virtus IP" | "PDSB" | "MPM"
+
+Application & Data:
+- components: free text (comma-separated list)
+- integrations: free text (describe system integrations)
+- dataClassification: "Public" | "Internal" | "Confidential" | "Restricted"
+- dataInMotion: array from ["TLS 1.2", "TLS 1.3", "AES-256", "SHA-2 Hashing"]
+- dataAtRest: array from ["Database encryption - TDE with AES-256", "Server-side encryption - AES-256"]
+- dataIntegration: array from ["API", "ETL", "Middleware"]
+- dataRetention: "1 - 2 Years" | "1 - 3 Years" | "5 Years" | "7 Years"
+- dataPrivacy: array from ["GDPR", "ISO/IEC 27701", "PDPA"]
+- dataLossPrevention: array from ["Data Classification", "Detection Mechanism", "Policy Declaration", "Violation Remediation"]
+
+Cybersecurity:
+- bia.confidentiality: "Severe" | "Major" | "Moderate" | "Insignificant"
+- bia.integrity: "Severe" | "Major" | "Moderate" | "Insignificant"
+- bia.availability: "Severe" | "Major" | "Moderate" | "Insignificant"
+- bia.overall: "Severe" | "Major" | "Moderate" | "Insignificant"
+- ha: array from ["Secondary Server (Cloud and/or On-Premise)", "Availability Zone (Cloud only)", "Not Applicable"]
+- dr: array from ["Replication Across (Cloud only)", "Off-Site Replication (On-Prem Data Centre within 25km)", "Not Applicable"]
+- connectivity: array from ["HTTP", "HTTPS", "SFTP", "RSTP (Video)", "SIP (Voice)", "SSH", "DNS (External)", "DNS (Internal)"]
+- iam.authenticationApproach: array from ["SAML", "OpenID 2.0", "OAuth 2.0", "WS-Federation"]
+- iam.accessControl: array from ["Role Based", "Attribute Based", "Context Based", "Policy Based"]
+- iam.sso: array from ["Microsoft Entra ID", "Custom Tailored", "AWS LDAP", "RADIUS", "Azure B2B", "Microsoft AD"]
+- iam.keyManagement: array from ["Azure Key Vault", "AWS KMS", "Local Config"]
+- iam.clientServerAuth: array from ["JWT", "Basic", "Session"]
+- iam.cloudAccess: array from ["API", "SAS", "Connection String", "User/Password", "Web Console"]
+- iam.authImplementation: array from ["Azure AD Authentication (Cloud AD)", "Microsoft AD authentication (On-Prem AD)", "Multi-factor Authentication (MFA)"]
+- endpoint.hardenedEndpoint: array from ["Server", "Laptop", "Mobile Devices", "Workstation", "Network Devices", "IoT Devices"]
+- endpoint.endpointProtection: array from ["MDE", "McAfee", "Intune"]
+- applicationSecurity.appDevelopment: array from ["In-house", "COTS", "3rd Party"]
+- applicationSecurity.appFacing: array from ["Internal Users", "External Users (mandatory WAF)", "Non-Human"]
+- networkSecurity.perimeterSecurity: array from ["Firewall - Next Generation Firewall", "IPS - Intrusion Prevention System", "WAF - Web Application Firewall"]
+- networkSecurity.networkConnectivity: array from ["PETRONET", "WiFi (WPA3)", "5G", "Local ISP", "Secure VPN", "Network Segmentation", "IPSec", "4G", "SDWAN"]
+- networkSecurity.pam: array from ["CyberArk", "Xage", "Jump Server"]
+
+## INSTRUCTIONS
+
+1. Read the conversation and extract ALL identifiable HLD fields into the JSON schema below. Only use values from the valid options above. For free-text fields, use the user's own words.
+2. Merge with the current extraction state — do NOT remove fields that were already extracted unless the user explicitly changes them.
+3. Generate 1-3 natural follow-up questions for the most important MISSING required fields. Prioritize: category, title, application, hldType, landscape, division, components, integrations, dataClassification, bia ratings.
+4. Provide a short reply acknowledging what you understood from the latest message.
+
+Return ONLY valid JSON with these keys:
+- "reply": string — your conversational response (2-3 sentences, acknowledge what was captured, mention what's still needed)
+- "extraction": object — the full extracted form data matching this structure:
+  {{
+    "registration": {{ "category": "", "application": "", "title": "", "description": "", "hldType": "", "landscape": "", "division": "" }},
+    "applicationData": {{ "components": "", "integrations": "", "dataClassification": "", "dataInMotion": [], "dataAtRest": [], "dataIntegration": [], "dataRetention": "", "dataPrivacy": [], "dataLossPrevention": [] }},
+    "cybersecurity": {{ "bia": {{ "confidentiality": "", "integrity": "", "availability": "", "overall": "" }}, "ha": [], "dr": [], "connectivity": [], "iam": {{ "authenticationApproach": [], "accessControl": [], "sso": [], "keyManagement": [], "clientServerAuth": [], "cloudAccess": [], "authImplementation": [] }}, "endpoint": {{ "hardenedEndpoint": [], "endpointProtection": [] }}, "applicationSecurity": {{ "appDevelopment": [], "appFacing": [] }}, "networkSecurity": {{ "perimeterSecurity": [], "networkConnectivity": [], "pam": [] }} }}
+  }}
+- "followUpQuestions": array of strings — 1-3 questions about missing required fields
+- "filledCount": number — count of non-empty fields in the extraction
+- "totalCount": number — total number of fields (use 30)
+
+Return ONLY valid JSON. No markdown fences."""
+
+
+def handle_chat_qa(body):
+    """Handle a Q&A chatbot message with form context awareness."""
     message = body.get("message", "")
     current_step = body.get("currentStep", 1)
     form_context = body.get("formContext", {})

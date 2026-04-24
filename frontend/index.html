@@ -75,10 +75,21 @@
 
     <!-- Create HLD Wizard View -->
     <section id="wizard-view" class="view">
-      <div class="wizard-header">
-        <button class="btn-back" onclick="showDashboard()" aria-label="Back to dashboard">&larr; Back</button>
-        <h1>Create New HLD</h1>
+      <div class="wizard-top-bar">
+        <div class="wizard-header">
+          <button class="btn-back" onclick="showDashboard()" aria-label="Back to dashboard">&larr; Back</button>
+          <h1>Create New HLD</h1>
+        </div>
+        <button id="chatbot-toggle-btn" class="chatbot-toggle-btn" onclick="toggleChatbot()" aria-label="Toggle AI Assistant">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span id="chatbot-toggle-label">AI Assistant</span>
+        </button>
       </div>
+
+      <div class="wizard-layout" id="wizard-layout">
+      <div class="wizard-content">
 
       <!-- Step Indicators -->
       <div class="step-indicators" role="tablist" aria-label="HLD creation steps">
@@ -391,8 +402,64 @@
             </div>
           </div>
         </div>
+      </div><!-- /step-4 -->
+    </div><!-- /wizard-content -->
+
+    <!-- Bedrock Assistant — inline side panel -->
+    <div id="chatbot-panel" class="chatbot-panel" aria-label="Bedrock Assistant" role="complementary" style="display:none">
+      <div class="chatbot-header">
+        <div class="chatbot-header-left">
+          <div class="chatbot-avatar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#00A19C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="chatbot-title">Bedrock Assistant</div>
+            <div class="chatbot-status"><span class="chatbot-status-dot"></span>ONLINE &amp; ANALYZING</div>
+          </div>
+        </div>
+        <button class="chatbot-close" onclick="toggleChatbot()" aria-label="Close assistant">&times;</button>
       </div>
-    </section>
+      <div class="chatbot-mode-toggle">
+        <button class="chatbot-mode-btn active" id="mode-qa" onclick="setChatMode('qa')">Q&A</button>
+        <button class="chatbot-mode-btn" id="mode-intake" onclick="setChatMode('intake')">HLD Intake</button>
+      </div>
+      <div class="chatbot-progress" id="chatbot-progress" style="display:none">
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="progress-bar-fill" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progress-label">0 / 30 fields captured</div>
+        <div class="progress-sections" id="progress-sections">
+          <span class="progress-section" id="prog-reg">Registration: 0/7</span>
+          <span class="progress-section" id="prog-app">App & Data: 0/9</span>
+          <span class="progress-section" id="prog-sec">Security: 0/14</span>
+        </div>
+        <button class="btn-primary chatbot-review-btn" id="chatbot-review-btn" onclick="reviewIntakeAndGenerate()" disabled>Review & Generate HLD</button>
+      </div>
+      <div class="chatbot-messages" id="chatbot-messages" role="log" aria-live="polite"></div>
+      <div class="chatbot-quick-chips" id="chatbot-chips">
+        <button class="chatbot-chip" onclick="sendQuickMessage('Compliance check?')">Compliance check?</button>
+        <button class="chatbot-chip" onclick="sendQuickMessage('Cost estimate?')">Cost estimate?</button>
+        <button class="chatbot-chip" onclick="sendQuickMessage('Security recommendations?')">Security recommendations?</button>
+      </div>
+      <div class="chatbot-quick-chips" id="chatbot-intake-chips" style="display:none">
+        <button class="chatbot-chip" onclick="sendQuickMessage('I want to create a new cloud application HLD')">New cloud app</button>
+        <button class="chatbot-chip" onclick="sendQuickMessage('Enhancement to an existing SAP system')">SAP enhancement</button>
+        <button class="chatbot-chip" onclick="sendQuickMessage('New SaaS onboarding for my division')">SaaS onboarding</button>
+      </div>
+      <div class="chatbot-input-bar">
+        <input type="text" id="chatbot-input" class="chatbot-input" placeholder="Ask Bedrock a question…" aria-label="Chat message input" onkeydown="onChatKeydown(event)">
+        <button class="chatbot-send" onclick="sendChatMessage()" aria-label="Send message">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div><!-- /chatbot-panel -->
+
+    </div><!-- /wizard-layout -->
+    </section><!-- /wizard-view -->
 
     <!-- HLD Detail View (read-only) -->
     <section id="detail-view" class="view">
@@ -414,51 +481,8 @@
         <div class="detail-grid" id="detail-cybersecurity"></div>
       </div>
       <div id="detail-ai-results"></div>
-    </section>
+    </section><!-- /detail-view -->
   </main>
-
-  <!-- Bedrock Assistant Chatbot Panel -->
-  <div id="chatbot-panel" class="chatbot-panel" aria-label="Bedrock Assistant" role="complementary" style="display:none">
-    <div class="chatbot-header">
-      <div class="chatbot-header-left">
-        <div class="chatbot-avatar">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#00A19C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div>
-          <div class="chatbot-title">Bedrock Assistant</div>
-          <div class="chatbot-status"><span class="chatbot-status-dot"></span>ONLINE &amp; ANALYZING</div>
-        </div>
-      </div>
-      <button class="chatbot-close" onclick="toggleChatbot()" aria-label="Close assistant">&times;</button>
-    </div>
-
-    <div class="chatbot-messages" id="chatbot-messages" role="log" aria-live="polite"></div>
-
-    <div class="chatbot-quick-chips" id="chatbot-chips">
-      <button class="chatbot-chip" onclick="sendQuickMessage('Compliance check?')">Compliance check?</button>
-      <button class="chatbot-chip" onclick="sendQuickMessage('Cost estimate?')">Cost estimate?</button>
-      <button class="chatbot-chip" onclick="sendQuickMessage('Security recommendations?')">Security recommendations?</button>
-    </div>
-
-    <div class="chatbot-input-bar">
-      <input type="text" id="chatbot-input" class="chatbot-input" placeholder="Ask Bedrock a question…" aria-label="Chat message input" onkeydown="onChatKeydown(event)">
-      <button class="chatbot-send" onclick="sendChatMessage()" aria-label="Send message">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- Chatbot Toggle FAB (shown in wizard) -->
-  <button id="chatbot-fab" class="chatbot-fab" onclick="toggleChatbot()" aria-label="Open Bedrock Assistant" style="display:none">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <span>AI Assistant</span>
-  </button>
 
   <script src="data.js"></script>
   <script src="app.js"></script>

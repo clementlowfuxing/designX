@@ -1,0 +1,36 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - img "PETRONAS logo" [ref=e5]
+      - navigation "Main navigation" [ref=e22]:
+        - generic [ref=e23]: myHLD Portal
+        - generic [ref=e25]: HLD Authoring & Governance
+  - main [ref=e26]:
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - heading "HLD Requests" [level=1] [ref=e29]
+        - button "Create new HLD request" [ref=e30] [cursor=pointer]: + Create New HLD
+      - group "HLD status summary" [ref=e31]:
+        - generic [ref=e32] [cursor=pointer]:
+          - generic [ref=e33]: "0"
+          - text: Total
+        - generic [ref=e34] [cursor=pointer]:
+          - generic [ref=e35]: "0"
+          - text: Submitted
+        - generic [ref=e36] [cursor=pointer]:
+          - generic [ref=e37]: "0"
+          - text: In-Review
+        - generic [ref=e38] [cursor=pointer]:
+          - generic [ref=e39]: "0"
+          - text: Approved
+      - table "HLD requests list" [ref=e41]:
+        - rowgroup [ref=e42]:
+          - row "HLD ID Title Application Division Status Date Author" [ref=e43]:
+            - columnheader "HLD ID" [ref=e44]
+            - columnheader "Title" [ref=e45]
+            - columnheader "Application" [ref=e46]
+            - columnheader "Division" [ref=e47]
+            - columnheader "Status" [ref=e48]
+            - columnheader "Date" [ref=e49]
+            - columnheader "Author" [ref=e50]
+        - rowgroup

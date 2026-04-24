@@ -1,0 +1,139 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - img "PETRONAS logo" [ref=e5]
+      - navigation "Main navigation" [ref=e22]:
+        - generic [ref=e23]: myHLD Portal
+        - generic [ref=e25]: HLD Authoring & Governance
+  - main [ref=e26]:
+    - generic [ref=e124]:
+      - generic [ref=e125]:
+        - generic [ref=e126]:
+          - button "Back to dashboard" [ref=e127] [cursor=pointer]: ← Back
+          - heading "Create New HLD" [level=1] [ref=e128]
+        - button "Toggle AI Assistant" [ref=e129] [cursor=pointer]:
+          - img [ref=e130]
+          - generic [ref=e132]: Close Assistant
+      - generic [ref=e133]:
+        - generic [ref=e134]:
+          - tablist "HLD creation steps" [ref=e135]:
+            - tab "1 Registration" [selected] [ref=e136] [cursor=pointer]:
+              - generic [ref=e137]: "1"
+              - generic [ref=e138]: Registration
+            - tab "2 Application & Data" [ref=e140] [cursor=pointer]:
+              - generic [ref=e141]: "2"
+              - generic [ref=e142]: Application & Data
+            - tab "3 Cybersecurity" [ref=e144] [cursor=pointer]:
+              - generic [ref=e145]: "3"
+              - generic [ref=e146]: Cybersecurity
+            - tab "4 AI Results" [ref=e148] [cursor=pointer]:
+              - generic [ref=e149]: "4"
+              - generic [ref=e150]: AI Results
+          - tabpanel [ref=e151]:
+            - generic [ref=e152]:
+              - heading "HLD Registration" [level=2] [ref=e153]
+              - generic [ref=e154]:
+                - generic [ref=e155]:
+                  - generic [ref=e156]: HLD Category *
+                  - combobox "HLD Category *" [ref=e157]:
+                    - option "Select category..." [selected]
+                    - option "New Application HLD"
+                    - option "Enhancement HLD"
+                - generic [ref=e158]:
+                  - generic [ref=e159]: Application
+                  - combobox "Application" [ref=e160]:
+                    - option "Select application..." [selected]
+                    - option "+ New Application"
+                    - option "SAP S/4HANA"
+                    - option "PETRONAS eProcurement"
+                    - option "myHR Portal"
+                    - option "Fleet Management System"
+                    - option "PETRONAS Trading System"
+                    - option "Upstream Production Dashboard"
+                    - option "Gentari EV Charging Platform"
+                    - option "HSE Incident Reporting"
+                    - option "MPM Asset Tracker"
+                    - option "Virtus IP Management"
+                - generic [ref=e161]:
+                  - generic [ref=e162]: HLD Title *
+                  - textbox "HLD Title *" [ref=e163]:
+                    - /placeholder: Enter HLD title...
+                - generic [ref=e164]:
+                  - generic [ref=e165]: HLD Description
+                  - textbox "HLD Description" [ref=e166]:
+                    - /placeholder: Describe the HLD scope...
+                - generic [ref=e167]:
+                  - generic [ref=e168]: HLD Type *
+                  - combobox "HLD Type *" [ref=e169]:
+                    - option "Select type..." [selected]
+                    - option "ERP Application"
+                    - option "Infrastructure"
+                    - option "Non-ERP Application"
+                - generic [ref=e170]:
+                  - generic [ref=e171]: Landscape Type *
+                  - combobox "Landscape Type *" [ref=e172]:
+                    - option "Select landscape..." [selected]
+                    - option "Enterprise Cloud"
+                    - option "On-Premise"
+                    - option "SaaS"
+                - generic [ref=e173]:
+                  - generic [ref=e174]: Business Division *
+                  - combobox "Business Division *" [ref=e175]:
+                    - option "Select division..." [selected]
+                    - option "Corporate"
+                    - option "Downstream"
+                    - option "Gentari"
+                    - option "PT & HSSE"
+                    - option "Gas & Maritime"
+                    - option "Upstream"
+                    - option "Virtus IP"
+                    - option "PDSB"
+                    - option "MPM"
+                - generic [ref=e176]:
+                  - generic [ref=e177]: Business Capability *
+                  - combobox "Business Capability *" [ref=e178]:
+                    - option "Select APQC category..." [selected]
+                    - option "1.0 - Develop Vision and Strategy"
+                    - option "2.0 - Develop and Manage Products and Services"
+                    - option "3.0 - Market and Sell Products and Services"
+                    - option "4.0 - Manage Supply Chain for Physical Products"
+                    - option "5.0 - Deliver Services"
+                    - option "6.0 - Manage Customer Service"
+                    - option "7.0 - Develop and Manage Human Capital"
+                    - option "8.0 - Manage Information Technology (IT)"
+                    - option "9.0 - Manage Financial Resources"
+                    - option "10.0 - Acquire, Construct, and Manage Assets"
+                    - option "11.0 - Manage Enterprise Risk, Compliance, Remediation, and Resiliency"
+                    - option "12.0 - Manage External Relationships"
+                    - option "13.0 - Develop and Manage Business Capabilities"
+                - generic [ref=e179]:
+                  - generic [ref=e180]: Business Capability (Sub-process)
+                  - combobox "Business Capability (Sub-process)" [disabled] [ref=e181]:
+                    - option "Select sub-process..." [selected]
+              - 'button "Next: Application & Data →" [ref=e183] [cursor=pointer]'
+        - complementary "Bedrock Assistant" [ref=e184]:
+          - generic [ref=e185]:
+            - generic [ref=e186]:
+              - img [ref=e188]
+              - generic [ref=e190]:
+                - generic [ref=e191]: Bedrock Assistant
+                - generic [ref=e192]: ONLINE & ANALYZING
+            - button "Close assistant" [ref=e194] [cursor=pointer]: ×
+          - generic [ref=e195]:
+            - button "Q&A" [ref=e196] [cursor=pointer]
+            - button "HLD Intake" [ref=e197] [cursor=pointer]
+          - log [ref=e198]:
+            - generic [ref=e199]:
+              - generic [ref=e200]:
+                - img [ref=e201]
+                - text: AI SUGGESTION
+              - generic [ref=e203]: Hello! I'm your Bedrock Assistant. I can help you fill in form fields, suggest security controls, or answer architecture questions. What would you like to know?
+          - generic [ref=e204]:
+            - button "Compliance check?" [ref=e205] [cursor=pointer]
+            - button "Cost estimate?" [ref=e206] [cursor=pointer]
+            - button "Security recommendations?" [ref=e207] [cursor=pointer]
+          - generic [ref=e208]:
+            - textbox "Chat message input" [active] [ref=e209]:
+              - /placeholder: Ask Bedrock a question…
+            - button "Send message" [ref=e210] [cursor=pointer]:
+              - img [ref=e211]
